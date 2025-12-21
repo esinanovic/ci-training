@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest"
+    "build": "echo 'No Build needed'"
   },
   "keywords": [],
   "author": "",
