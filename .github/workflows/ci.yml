@@ -1,6 +1,5 @@
 name: CI
 
-# Déclenche le workflow à chaque push ou pull request sur la branche main
 on:
   push:
     branches: [ main ]
@@ -8,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,4 +24,7 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+      - name: Build React app
+        run: npm run build
 
