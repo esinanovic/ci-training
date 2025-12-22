@@ -11,9 +11,6 @@ export default defineConfig([
     extends: ["js/recommended"],
     languageOptions: {
       globals: globals.browser
-    },
-    rules: {
-      "no-console": "error"
     }
   },
 

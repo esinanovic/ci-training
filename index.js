@@ -1,2 +1,2 @@
-let test = 3;
-text += 1;
+const message = "CI is working";
+console.log(message);
