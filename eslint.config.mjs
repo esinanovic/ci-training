@@ -3,28 +3,40 @@ import globals from "globals";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig([
-  // 🔹 Code applicatif
-  {
-    files: ["**/*.{js,mjs,cjs}"],
-    ignores: ["**/*.test.js"],
+  // Code production
+{
+    files: ["**/*.js"],
+    ignores: ["**/*.test.js"],  
+    languageOptions: {
+      globals: {
+        ...globals.node,        
+        ...globals.es2021       
+      },
+      ecmaVersion: "latest",
+      sourceType: "commonjs"    
+    },
     plugins: { js },
     extends: ["js/recommended"],
-    languageOptions: {
-      globals: globals.browser
+    rules: {
+      "no-console": "warn",
+      "no-unused-vars": "warn"
     }
   },
 
-  // 🔹 Fichiers de test (Jest)
+  // Fichiers de test
   {
-    files: ["**/*.test.js"],
-    plugins: { js },
-    extends: ["js/recommended"],
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest
-      }
+      files: ["**/*.test.js"],
+      languageOptions: {
+        globals: {
+          ...globals.node,
+          ...globals.jest,        
+          ...globals.es2021
+        },
+        ecmaVersion: "latest",
+        sourceType: "commonjs"
+      },
+      plugins: { js },
+      extends: ["js/recommended"]
     }
-  }
-]);
+  ]);
 

@@ -1,14 +1,9 @@
-// Importe les fonctions à tester
 const { addition, multiplication } = require('./math');
 
-// Tests unitaires
 describe("Math functions", () => {
   
   test("addition function works correctly", () => {
-    // Test basique
     expect(addition(3, 2)).toBe(5);
-    
-    // Tests edge cases
     expect(addition(0, 0)).toBe(0);
     expect(addition(-1, 1)).toBe(0);
     expect(addition(10, -5)).toBe(5);
