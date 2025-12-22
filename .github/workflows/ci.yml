@@ -7,21 +7,26 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  dependances:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - run: npm install
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
+  lint:
+    runs-on: ubuntu-latest
+    needs: dependances
+    steps:
+      - run: npm run lint
 
-      - name: Install dependencies
-        run: npm install
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - run: npm test
 
-      - name: Run tests
-        run: npm test
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - run: npm run build
 
