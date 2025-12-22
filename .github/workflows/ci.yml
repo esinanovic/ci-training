@@ -17,6 +17,7 @@ jobs:
         uses: actions/setup-node@v3 
         with: 
           node-version: '20'
+          cache: 'npm'
       - run: npm install
 
   lint:
@@ -30,7 +31,8 @@ jobs:
         uses: actions/setup-node@v3 
         with: 
           node-version: '20'
-      - run: npm install
+          cache: 'npm'
+      - run: npm ci
       - run: npm run lint
 
   test:
@@ -44,7 +46,8 @@ jobs:
         uses: actions/setup-node@v3 
         with: 
           node-version: '20'
-      - run: npm install 
+          cache: 'npm'
+      - run: npm ci
       - run: npm test
 
   build:
@@ -58,5 +61,7 @@ jobs:
         uses: actions/setup-node@v3 
         with: 
           node-version: '20'
+          cache: 'npm'
+      - run: npm ci
       - run: npm run build
 
