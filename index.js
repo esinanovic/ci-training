@@ -1,1 +1,1 @@
-console.log("CI is working");
+let test = 3;
