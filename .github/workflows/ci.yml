@@ -50,18 +50,20 @@ jobs:
       - run: npm ci
       - run: npm test
 
-  build:
+  docker-build:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Checkout repo 
-        uses: actions/checkout@v3 
-
-      - name: Setup Node 
-        uses: actions/setup-node@v3 
-        with: 
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run build
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Build Docker image
+        run: |
+          # Création de l'image
+          docker build -t ci-training:${{ github.sha }} .
+          
+          # Test rapide dans le conteneur
+          docker run --rm ci-training:${{ github.sha }} \
+            node -e "console.log(' Docker image works ! ')"
+          
 
