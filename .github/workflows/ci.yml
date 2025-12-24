@@ -65,5 +65,17 @@ jobs:
           # Test rapide dans le conteneur
           docker run --rm ci-training:${{ github.sha }} \
             node -e "console.log(' Docker image works ! ')"
+
+      - name: Save Docker image as artefact
+        run: docker save ci-training:${{ github.sha }} | gzip > image.tar.gz
+    
+      - name: Upload Docker image artefact
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-image 
+          path: image.tar.gz
+          retention-days: 1
+    
+
           
 
