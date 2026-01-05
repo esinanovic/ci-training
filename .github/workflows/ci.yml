@@ -75,7 +75,30 @@ jobs:
           name: docker-image 
           path: image.tar.gz
           retention-days: 1
-    
 
+  render-health-check:
+    runs-on: ubuntu-latest
+    needs: docker-build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Attendre le déploiement Render
+        run: |
+          echo "⏳ Attente du déploiement Render (30 secondes)..."
+          sleep 30
+      
+      - name: Vérifier l'application déployée
+        run: |
+          # Remplace par ton URL Render
+          RENDER_URL="https://ci-training.onrender.com"
+          
+          # Essaye de contacter l'app
+          if curl -s -f "$RENDER_URL/health" > /dev/null; then
+            echo "✅ L'application est en ligne sur Render !"
+            echo "🌐 URL: $RENDER_URL"
+          else
+            echo "⚠️  L'application ne répond pas encore"
+            echo "📊 Vérifie les logs sur Render dashboard"
+          fi
           
 

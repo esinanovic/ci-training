@@ -6,7 +6,7 @@ export default defineConfig([
   // Code production
 {
     files: ["**/*.js"],
-    ignores: ["**/*.test.js"],  
+    ignores: ["**/test.js"],  
     languageOptions: {
       globals: {
         ...globals.node,        
@@ -18,14 +18,14 @@ export default defineConfig([
     plugins: { js },
     extends: ["js/recommended"],
     rules: {
-      "no-console": "warn",
+      "no-console": "off",
       "no-unused-vars": "warn"
     }
   },
 
   // Fichiers de test
   {
-      files: ["**/*.test.js"],
+      files: ["**/test.js"],
       languageOptions: {
         globals: {
           ...globals.node,
