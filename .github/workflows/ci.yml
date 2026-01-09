@@ -13,12 +13,16 @@ jobs:
       - name: Checkout repo 
         uses: actions/checkout@v3 
 
-      - name: Setup Node 
+      - name: Setup Node and CACHE 
         uses: actions/setup-node@v3 
         with: 
           node-version: '20'
           cache: 'npm'
-      - run: npm install
+          cache-dependency-path: backend/package-lock.json
+      
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm install
 
   lint:
     runs-on: ubuntu-latest
@@ -60,6 +64,7 @@ jobs:
       - name: Build Docker image
         run: |
           # Création de l'image
+          cd backend
           docker build -t ci-training:${{ github.sha }} .
           
           # Test rapide dans le conteneur
