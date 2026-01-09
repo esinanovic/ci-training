@@ -1,14 +1,18 @@
 {
   "name": "backend",
   "version": "1.0.0",
-    "engines": {
+  "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
     "start": "node index.js",
+    "lint": "eslint .",
     "test": "node test.js"
   },
   "dependencies": {
     "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.2"
   }
 }
