@@ -26,7 +26,6 @@ app.get('/health', (req, res) => {
 });
 
 
-
 console.log('=== RENDER DEBUG ===');
 console.log('Node version:', process.version);
 console.log('NODE_ENV:', process.env.NODE_ENV);
