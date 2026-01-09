@@ -8,7 +8,7 @@ COPY . .
 FROM node:20-alpine
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm install --only=production --no-audit --no-fund
+RUN npm ci --omit=dev  
 COPY --from=builder /app/*.js ./
 EXPOSE 3001
 CMD ["node", "index.js"]
