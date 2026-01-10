@@ -1,5 +1,10 @@
 function App() {
-  return "Hello from Frontend Docker";
+  return (
+    <div>
+      <h1>Hello from Frontend Docker</h1>
+      <p>React app is running!</p>
+    </div>
+  );
 }
 
-module.exports = App;
+export default App;

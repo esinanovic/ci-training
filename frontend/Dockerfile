@@ -1,18 +1,14 @@
 # frontend/Dockerfile
-FROM node:20-alpine
+FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+COPY package.json package-lock.json ./
+RUN npm ci
 COPY . .
-
-# Build l'app React
 RUN npm run build
 
-# Installe serve pour servir les fichiers statiques
-RUN npm install -g serve
-
-# Expose le port
+# Stage 2 : Production
+FROM nginx:alpine
+COPY --from=builder /app/build /usr/share/nginx/html
+RUN echo 'server { listen 3000; location / { root /usr/share/nginx/html; index index.html; try_files $uri $uri/ /index.html; } }' > /etc/nginx/conf.d/default.conf
 EXPOSE 3000
-
-# Lance le serveur
-CMD ["serve", "-s", "build", "-l", "3000"]
+CMD ["nginx", "-g", "daemon off;"]
