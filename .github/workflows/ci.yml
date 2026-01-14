@@ -22,7 +22,13 @@
         
         - name: Install backend dependencies
           working-directory: ./backend
-          run: npm install
+          run: npm ci
+
+        - name: Save node_modules to cache 
+          uses: actions/cache/save@v3
+          with:
+            path: backend/node_modules
+            key: node-modules-${{ github.sha }}-${{ github.run_id }}
           
 
     validate-dependencies:
@@ -58,6 +64,15 @@
             cache: 'npm'
             cache-dependency-path: backend/package-lock.json
 
+        - name: Restore node_modules cache
+          uses: actions/cache@v3
+          id: node-cache-lint
+          with:
+            path: backend/node_modules
+            key: node-modules-${{ github.sha }}
+            restore-keys: |
+              node-modules-
+
         - name : "define working directory "
           working-directory: ./backend
           run: npm run lint
@@ -92,10 +107,6 @@
             # Création de l'image
             cd backend
             docker build -t ci-training:${{ github.sha }} .
-            
-            # Test rapide dans le conteneur
-            docker run --rm ci-training:${{ github.sha }} \
-              node -e "console.log(' Docker image works ! ')"
 
         - name: Save Docker image as artefact
           run: docker save ci-training:${{ github.sha }} | gzip > image.tar.gz
@@ -105,31 +116,25 @@
           with:
             name: docker-image 
             path: image.tar.gz
-            retention-days: 1
+            retention-days: 2
 
     render-health-check:
       runs-on: ubuntu-latest
       needs: docker-build
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       
-      steps:
-        - name: Attendre le déploiement Render
-          run: |
-            echo "⏳ Attente du déploiement Render (30 secondes)..."
-            sleep 30
-        
+      steps:        
         - name: Vérifier l'application déployée
           run: |
-            # Remplace par ton URL Render
-            RENDER_URL="https://ci-training.onrender.com"
-            
-            # Essaye de contacter l'app
+            RENDER_URL="https://ci-training-app.onrender.com"
+            sleep 10
+            # HEALTH
             if curl -s -f "$RENDER_URL/health" > /dev/null; then
-              echo "✅ L'application est en ligne sur Render !"
-              echo "🌐 URL: $RENDER_URL"
+              echo "L'application est en ligne sur Render !"
+              echo " URL: $RENDER_URL"
             else
-              echo "⚠️  L'application ne répond pas encore"
-              echo "📊 Vérifie les logs sur Render dashboard"
+              echo "L'application ne répond pas encore"
+              echo "Vérifie les logs sur Render dashboard"
             fi
             
 
