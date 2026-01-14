@@ -122,9 +122,21 @@
             cache-from: type=gha
             cache-to: type=gha,mode=max
 
-            
+
         - name: Save Docker image as artefact
           run: docker save ci-training:${{ github.sha }} | gzip > image.tar.gz
+
+        - name: Test built image
+          run: |
+            echo "🔍 Testing Docker image..."
+            docker images ci-training:${{ github.sha }}
+            echo ""
+            echo "📦 Image details:"
+            docker inspect ci-training:${{ github.sha }} | grep -A5 "Size"
+            echo ""
+            echo "🚀 Running container test:"
+            docker run --rm ci-training:${{ github.sha }} \
+              node -e "console.log('✅ Image works! Process running as:', process.getuid())"
       
         - name: Upload Docker image artefact
           uses: actions/upload-artifact@v4
