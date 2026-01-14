@@ -13,7 +13,7 @@ RUN addgroup -g 1001 -S nodejs && \
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev  
-COPY --from=builder /app/*.js ./
+COPY --from=builder /app/dist ./dist
 
 RUN chown -R nodejs:nodejs /app
 USER nodejs
