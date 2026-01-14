@@ -11,10 +11,10 @@
       runs-on: ubuntu-latest
       steps:
         - name: Checkout repo 
-          uses: actions/checkout@v3 
+          uses: actions/checkout@v4
 
         - name: Setup Node and CACHE 
-          uses: actions/setup-node@v3 
+          uses: actions/setup-node@v4 
           with: 
             node-version: '20'
             cache: 'npm'
@@ -25,7 +25,8 @@
           run: npm ci
 
         - name: Save node_modules to cache 
-          uses: actions/cache/save@v3
+          uses: actions/cache@v4
+          id: node-cache
           with:
             path: backend/node_modules
             key: node-modules-${{ github.sha }}-${{ github.run_id }}
@@ -36,10 +37,10 @@
       needs: dependances
       steps:
       - name: Checkout repo 
-        uses: actions/checkout@v3 
+        uses: actions/checkout@v4
       
       - name: Setup Node for BACKEND
-        uses: actions/setup-node@v3 
+        uses: actions/setup-node@v4 
         with: 
           node-version: '20'
           cache: 'npm'
@@ -55,17 +56,17 @@
       needs: validate-dependencies
       steps:
         - name: Checkout repo 
-          uses: actions/checkout@v3 
+          uses: actions/checkout@v4
 
         - name: Setup Node 
-          uses: actions/setup-node@v3 
+          uses: actions/setup-node@v4 
           with: 
             node-version: '20'
             cache: 'npm'
             cache-dependency-path: backend/package-lock.json
 
         - name: Restore node_modules cache
-          uses: actions/cache@v3
+          uses: actions/cache@v4
           id: node-cache-lint
           with:
             path: backend/node_modules
@@ -82,10 +83,10 @@
       needs: lint
       steps:
         - name: Checkout repo 
-          uses: actions/checkout@v3 
+          uses: actions/checkout@v4
 
         - name: Setup Node 
-          uses: actions/setup-node@v3 
+          uses: actions/setup-node@v4 
           with: 
             node-version: '20'
             cache: 'npm'
