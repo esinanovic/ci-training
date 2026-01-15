@@ -22,16 +22,43 @@
 # #USER nginxuser
 # CMD ["nginx", "-g", "daemon off;"]
 
+#test
 
-# frontend/Dockerfile (version test)
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=${REACT_APP_API_URL}
+RUN npm run build
+
 FROM nginx:alpine
 
-RUN echo '<h1>✅ Frontend Works! PORT=$PORT</h1>' > /usr/share/nginx/html/index.html
+# Installe gettext pour envsubst
+RUN apk add --no-cache gettext
 
-# Script qui utilise le PORT Railway
+# Copie les fichiers React
+COPY --from=builder /app/build /usr/share/nginx/html
+
+# Crée le template de config Nginx avec variable PORT
+RUN echo 'server {\
+  listen ${PORT};\
+  server_name _;\
+  root /usr/share/nginx/html;\
+  index index.html;\
+  \
+  location / {\
+    try_files $uri $uri/ /index.html;\
+  }\
+}' > /etc/nginx/conf.d/default.conf.template
+
+# Script d'entrée qui remplace ${PORT}
 RUN echo '#!/bin/sh\n\
-echo "Railway PORT: $PORT"\n\
-sed -i "s/listen 80/listen $PORT/g" /etc/nginx/conf.d/default.conf\n\
+# Remplace ${PORT} par la vraie valeur\n\
+envsubst "\$PORT" < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf\n\
+echo "🚀 Nginx configuré sur le port: \$PORT"\n\
+# Démarre Nginx\n\
 exec nginx -g "daemon off;"' > /docker-entrypoint.sh
 
 RUN chmod +x /docker-entrypoint.sh
