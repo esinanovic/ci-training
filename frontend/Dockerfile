@@ -22,28 +22,20 @@
 # #USER nginxuser
 # CMD ["nginx", "-g", "daemon off;"]
 
-#test
 FROM nginx:alpine
 
-# Fichier HTML simple
-RUN echo '<!DOCTYPE html>\
-<html>\
-<head><title>Railway Test</title></head>\
-<body>\
-<h1>✅ TEST SUCCESS!</h1>\
-<p>Port Railway: <span id="port"></span></p>\
-<script>\
-document.getElementById("port").textContent = window.location.port || "80/443";\
-</script>\
-</body>\
-</html>' > /usr/share/nginx/html/index.html
+# HTML test
+RUN echo '<h1>🎯 Railway Test Page</h1><p>Nginx is running!</p>' > /usr/share/nginx/html/index.html
 
-# Configuration qui accepte n'importe quel port
-RUN echo 'server {\
-  listen ${{PORT}};\
-  server_name _;\
-  root /usr/share/nginx/html;\
-  index index.html;\
-}' > /etc/nginx/conf.d/default.conf.template
-
-CMD /bin/sh -c "envsubst < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+# Script qui adapte automatiquement
+CMD /bin/sh -c "
+  # Utilise le PORT Railway, sinon 3000
+  PORT=\${PORT:-3000}
+  echo \"Starting Nginx on port: \$PORT\"
+  
+  # Remplace le port dans la config par défaut
+  sed -i \"s/listen 80/listen \$PORT/\" /etc/nginx/conf.d/default.conf
+  
+  # Démarre Nginx
+  nginx -g 'daemon off;'
+"
