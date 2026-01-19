@@ -181,7 +181,11 @@
             path: .
 
         - name: Load image
-          run: docker load -i image.tar.gz
+          run: |
+            # On cherche le fichier image.tar.gz dans tous les sous-dossiers
+            TAR_PATH=$(find . -name "image.tar.gz" | head -n 1)
+            echo "Fichier trouvé ici : $TAR_PATH"
+            docker load -i "$TAR_PATH"
         
         - name: Start services
           env:
