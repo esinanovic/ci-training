@@ -187,10 +187,9 @@
           env:
             GITHUB_SHA: ${{ github.sha }} 
           run: |
-            docker compose -f docker compose.test.yml up -d
-            # Attendre que les services soient healthy
+            docker compose -f docker-compose.test.yml up -d
             timeout 60 bash -c '
-              while ! docker compose -f docker compose.test.yml ps backend | grep -q "(healthy)"; do
+              while ! docker compose -f docker-compose.test.yml ps backend | grep -q "(healthy)"; do
                 echo "Waiting for backend..."
                 sleep 5
               done
@@ -202,15 +201,14 @@
         - name: Show logs on failure
           if: failure()
           run: |
-            echo "Backend logs:"
-            docker compose -f docker compose.test.yml logs backend
-            echo ""
-            echo "Frontend logs:"
-            docker compose -f docker compose.test.yml logs frontend
+            echo "--- BACKEND LOGS ---"
+            docker compose -f docker-compose.test.yml logs backend
+            echo "--- FRONTEND LOGS ---"
+            docker compose -f docker-compose.test.yml logs frontend
             
         - name: Cleanup
           if: always()
-          run: docker compose -f docker compose.test.yml down -v
+          run: docker compose -f docker-compose.test.yml down -v
 
     health-check:
       runs-on: ubuntu-latest
