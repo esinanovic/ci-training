@@ -30,6 +30,16 @@ app.get('/health', (req, res) => {
   });
 });
 
+app.get('/api/getAll', async (req, res) => {
+  try {
+    const result = await db.query('SELECT * FROM test ORDER BY id ASC');
+    res.json(result.rows); // On renvoie directement le tableau de données
+  } catch (err) {
+    console.error('Erreur /getAll:', err);
+    res.status(500).json({ error: 'Erreur lors de la récupération des données' });
+  }
+});
+
 
 app.get('/api/status', async (req, res) => {
   try {
