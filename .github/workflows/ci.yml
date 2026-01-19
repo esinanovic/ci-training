@@ -207,14 +207,14 @@
           if: failure()
           run: |
             echo "Backend logs:"
-            docker compose -f docker-compose.test.yml logs backend
+            docker compose -f docker compose.test.yml logs backend
             echo ""
             echo "Frontend logs:"
-            docker compose -f docker-compose.test.yml logs frontend
+            docker compose -f docker compose.test.yml logs frontend
             
         - name: Cleanup
           if: always()
-          run: docker compose -f docker-compose.test.yml down -v
+          run: docker compose -f docker compose.test.yml down -v
 
     health-check:
       runs-on: ubuntu-latest
