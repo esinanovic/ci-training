@@ -157,9 +157,9 @@
           run: |
             docker save \
               ci-training-backend:${{ github.sha }} \
-              ci-training-frontend:${{ github.sha }} | gzip > images.tar.gz
+              ci-training-frontend:${{ github.sha }} | gzip > image.tar.gz
             echo "Images sauvegardées:"
-            ls -lh images.tar.gz
+            ls -lh image.tar.gz
           
         - name: Upload Docker image artefact
           uses: actions/upload-artifact@v4
@@ -181,11 +181,7 @@
             path: .
 
         - name: Load image
-          run: |
-            # On cherche le fichier image.tar.gz dans tous les sous-dossiers
-            TAR_PATH=$(find . -name "image.tar.gz" | head -n 1)
-            echo "Fichier trouvé ici : $TAR_PATH"
-            docker load -i "$TAR_PATH"
+          run: docker load -i image.tar.gz
         
         - name: Start services
           env:
