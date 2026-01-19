@@ -164,7 +164,7 @@
         - name: Upload Docker image artefact
           uses: actions/upload-artifact@v4
           with:
-            name: docker-image 
+            name: image 
             path: image.tar.gz
             retention-days: 2
 
@@ -177,7 +177,8 @@
         - name: Download Docker image
           uses: actions/download-artifact@v4
           with:
-            name: docker-image
+            name: image
+            path: .
 
         - name: Load image
           run: docker load -i image.tar.gz
@@ -186,10 +187,10 @@
           env:
             GITHUB_SHA: ${{ github.sha }} 
           run: |
-            docker compose -f docker-compose.test.yml up -d
+            docker compose -f docker compose.test.yml up -d
             # Attendre que les services soient healthy
             timeout 60 bash -c '
-              while ! docker compose -f docker-compose.test.yml ps backend | grep -q "(healthy)"; do
+              while ! docker compose -f docker compose.test.yml ps backend | grep -q "(healthy)"; do
                 echo "Waiting for backend..."
                 sleep 5
               done
