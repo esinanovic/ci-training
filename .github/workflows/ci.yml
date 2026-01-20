@@ -197,6 +197,15 @@
                 sleep 5
               done
             '
+
+        - name: healthcheck isdeployed
+          run: |
+            sleep 30
+            if curl -s -f "http://localhost:3001/health" > /dev/null; then
+              echo "L'application est en ligne "
+            else
+              echo "L'application ne répond pas "
+            fi
         
         - name: Run integration tests
           run: node tests/integration/docker-integration.test.js
@@ -212,20 +221,5 @@
         - name: Cleanup
           if: always()
           run: docker compose -f docker-compose.test.yml down -v
-
-    health-check:
-      runs-on: ubuntu-latest
-      needs: docker-build
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      
-      steps:        
-        - name: healthcheck isdeployed
-          run: |
-            sleep 30
-            if curl -s -f "https://front-service-production-4cba.up.railway.app/health" > /dev/null; then
-              echo "L'application est en ligne "
-            else
-              echo "L'application ne répond pas "
-            fi
             
 
