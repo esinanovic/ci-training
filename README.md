@@ -249,12 +249,34 @@ Déploiement
 *   Le service cloud reconstruit les images à partir du dépôt Git
     
 *   Les health checks garantissent la disponibilité après déploiement
-    
+
+
+Démonstration (environnement cloud)
+-----------------------------------
+
+
+L’application a été déployée sur Railway dans le cadre d’une démonstration.
+
+Pour des raisons de coûts et de limitations des plans gratuits, l’environnement n’est pas maintenu en ligne en permanence.
+
+> Ci-dessous, une capture d’écran illustrant :
+
+![Capture d'écran Railway](./docs/screenshots/railway-frontend.PNG)
+
+*   Le frontend React
+
+*   L’état de santé du backend
+
+*   La connexion à la base de données
+
+
 
 Fonctionnalités à venir
 -----------------------
 
-> Cette section reflète les évolutions prévues du projet.
+Les évolutions suivantes sont volontairement prévues dans un projet distinct, afin de conserver ce dépôt comme une base stable et finalisée axée sur Docker, CI/CD et les fondamentaux DevOps.
+
+> Les prochaines étapes porteront sur des sujets cloud-native et observabilité avancée :
 
 *   Exposition d’un endpoint /metrics
     
