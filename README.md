@@ -254,7 +254,6 @@ Déploiement
 Démonstration (environnement cloud)
 -----------------------------------
 
-
 L’application a été déployée sur Railway dans le cadre d’une démonstration.
 
 Pour des raisons de coûts et de limitations des plans gratuits, l’environnement n’est pas maintenu en ligne en permanence.
