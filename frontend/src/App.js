@@ -36,6 +36,10 @@ function App() {
     flexDirection: 'column'
   };
 
+
+
+
+  
   return (
     <div style={{ padding: '40px', backgroundColor: '#f0f2f5', minHeight: '100vh', fontFamily: 'system-ui' }}>
       <h1 style={{ textAlign: 'center', marginBottom: '40px', color: '#1a1a1a' }}>Railway Full-Stack Monitor</h1>
